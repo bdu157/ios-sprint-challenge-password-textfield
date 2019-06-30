@@ -64,10 +64,12 @@ class PasswordField: UIControl {
         addSubview(titleLabel)
         
             //titleLabel contraints
-        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: standardMargin).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: standardMargin).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -standardMargin).isActive = true
-        
+        NSLayoutConstraint.activate(
+            [
+                titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: standardMargin),
+        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: standardMargin),
+        titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -standardMargin)
+        ])
         // 2. textField
         //textField.frame = CGRect(x: 0, y: 40.0, width: 330, height: textFieldContainerHeight)
         textField.layer.borderColor = textFieldBorderColor.cgColor
@@ -80,12 +82,13 @@ class PasswordField: UIControl {
         addSubview(textField)
         
             //textField constraints
-        textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: textFieldMargin).isActive = true
-        textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: standardMargin).isActive = true
-        textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -textFieldMargin).isActive = true
-        textField.heightAnchor.constraint(equalToConstant: textFieldContainerHeight).isActive = true
-        textField.widthAnchor.constraint(equalToConstant: bounds.width - textFieldMargin * 2).isActive = true
-        
+        NSLayoutConstraint.activate ([
+        textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: textFieldMargin),
+        textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: standardMargin),
+        textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -textFieldMargin),
+        textField.heightAnchor.constraint(equalToConstant: textFieldContainerHeight),
+        textField.widthAnchor.constraint(equalToConstant: bounds.width - textFieldMargin * 2)
+        ])
         // 2-1 button
         //howHideButton.frame = CGRect(x: 285.0, y: 10, width: 30.0, height: 30.0)
         showHideButton.setImage(UIImage(named: "eyes-closed"), for: .normal)
