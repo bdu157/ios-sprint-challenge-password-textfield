@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StrrengthLevel : String {
+enum StrengthLevel : String {
     case weak = "Too weak"
     case medium = "Could be stronger"
     case strong = "Strong password"
@@ -31,7 +31,7 @@ class PasswordField: UIControl {
     private let textFieldBorderColor = UIColor(hue: 208/360.0, saturation: 80/100.0, brightness: 94/100.0, alpha: 1)
     private let bgColor = UIColor(hue: 0, saturation: 0, brightness: 97/100.0, alpha: 1)
     
-    // States of the password strength indicators
+    // States of the pass word strength indicators
     private let unusedColor = UIColor(hue: 210/360.0, saturation: 5/100.0, brightness: 86/100.0, alpha: 1)
     private let weakColor = UIColor(hue: 0/360, saturation: 60/100.0, brightness: 90/100.0, alpha: 1)
     private let mediumColor = UIColor(hue: 39/360.0, saturation: 60/100.0, brightness: 90/100.0, alpha: 1)
@@ -47,58 +47,120 @@ class PasswordField: UIControl {
     
     func setup() {
         
+        self.backgroundColor = bgColor
+        self.layer.cornerRadius = 6
+        self.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 20.0)
+        self.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 40.0)
+        self.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -20.0)
+        
         // Lay out your subviews here
         
         // 1. titleLabel
-        titleLabel.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
+        //titleLabel.frame = CGRect(x: 0.0, y: 0.0, width: 150, height: 40)
         titleLabel.text = "ENTER PASSWORD"
         titleLabel.textColor = labelTextColor
         titleLabel.font = labelFont
-        addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(titleLabel)
+        
+            //titleLabel contraints
+        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: standardMargin).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: standardMargin).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -standardMargin).isActive = true
         
         // 2. textField
-        textField.frame = CGRect(x: 0, y: 25.0, width: 330, height: textFieldContainerHeight)
-        textField.textColor = labelTextColor
+        //textField.frame = CGRect(x: 0, y: 40.0, width: 330, height: textFieldContainerHeight)
         textField.layer.borderColor = textFieldBorderColor.cgColor
         textField.layer.cornerRadius = 8
         textField.layer.borderWidth = 2.0
+        textField.tintColor = textFieldBorderColor
+        textField.isSecureTextEntry = true
         
-        
+        textField.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textField)
+        
+            //textField constraints
+        textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: textFieldMargin).isActive = true
+        textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: standardMargin).isActive = true
+        textField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -textFieldMargin).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: textFieldContainerHeight).isActive = true
+        textField.widthAnchor.constraint(equalToConstant: bounds.width - textFieldMargin * 2).isActive = true
+        
         // 2-1 button
-        showHideButton.frame = CGRect(x: 290.0, y: 10.0, width: 30.0, height: 30.0)
+        //howHideButton.frame = CGRect(x: 285.0, y: 10, width: 30.0, height: 30.0)
         showHideButton.setImage(UIImage(named: "eyes-closed"), for: .normal)
         showHideButton.layer.borderColor = UIColor.red.cgColor
         showHideButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
+        showHideButton.translatesAutoresizingMaskIntoConstraints = false
         textField.addSubview(showHideButton)
         
+            // button constraints
+        showHideButton.topAnchor.constraint(equalTo: textField.topAnchor).isActive = true
+        showHideButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -standardMargin).isActive = true
+        showHideButton.bottomAnchor.constraint(equalTo: textField.bottomAnchor).isActive = true
+        showHideButton.heightAnchor.constraint(equalToConstant: textFieldContainerHeight).isActive = true
+        showHideButton.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
+        
         // 3. indicator bars
-        weakView.frame = CGRect(origin: CGPoint(x: 0, y: 90.0), size: colorViewSize)
+            // 3-1 weakview
+        //weakView.frame = CGRect(origin: CGPoint(x: standardMargin, y: 95.0), size: colorViewSize)
         weakView.backgroundColor = weakColor
+        weakView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(weakView)
+                //weakview constraints
+        weakView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: standardMargin).isActive = true
+        weakView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: standardMargin).isActive = true
+        weakView.widthAnchor.constraint(equalToConstant: colorViewSize.width).isActive = true
+        weakView.heightAnchor.constraint(equalToConstant: colorViewSize.height).isActive = true
         
-        mediumView.frame = CGRect(origin: CGPoint(x: colorViewSize.width + 5, y: 90.0), size: colorViewSize)
+            // 3-2 mediumview
+        //mediumView.frame = CGRect(origin: CGPoint(x: colorViewSize.width + standardMargin * 2, y: 95.0), size: colorViewSize)
         mediumView.backgroundColor = .lightGray
+        mediumView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(mediumView)
+                //mediumview constraints
+        mediumView.leadingAnchor.constraint(equalTo: weakView.trailingAnchor, constant: standardMargin).isActive = true
+        mediumView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: standardMargin).isActive = true
+        mediumView.widthAnchor.constraint(equalToConstant: colorViewSize.width).isActive = true
+        mediumView.heightAnchor.constraint(equalToConstant: colorViewSize.height).isActive = true
         
-        strongView.frame = CGRect(origin: CGPoint(x: colorViewSize.width * 2 + 5 + 5, y: 90.0), size: colorViewSize)
+            // 3-3 strongview
+        //strongView.frame = CGRect(origin: CGPoint(x: colorViewSize.width * 2 + standardMargin * 3, y: 95.0), size: colorViewSize)
         strongView.backgroundColor = .lightGray
+        strongView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(strongView)
+                // strongview constraints
+        strongView.leadingAnchor.constraint(equalTo: mediumView.trailingAnchor, constant: standardMargin).isActive = true
+        strongView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: standardMargin).isActive = true
+        strongView.widthAnchor.constraint(equalToConstant: colorViewSize.width).isActive = true
+        strongView.heightAnchor.constraint(equalToConstant: colorViewSize.height).isActive = true
         
         // 4. indicator label
-        strengthDescriptionLabel.frame = CGRect(origin: CGPoint(x: colorViewSize.width * 3 + 5 + 5 + 7, y: 90.0), size: CGSize(width: colorViewSize.width * 2, height: 10.00))
+        //strengthDescriptionLabel.frame = CGRect(origin: CGPoint(x: colorViewSize.width * 3 + standardMargin * 4, y: 93.0), size: CGSize(width: colorViewSize.width * 2, height: colorViewSize.height * 2))
         strengthDescriptionLabel.textColor = labelTextColor
-        strengthDescriptionLabel.text = StrrengthLevel.weak.rawValue
-        strengthDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        strengthDescriptionLabel.text = StrengthLevel.weak.rawValue
+        strengthDescriptionLabel.font = UIFont.boldSystemFont(ofSize: 11)
+        strengthDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(strengthDescriptionLabel)
-        
+            // indicator label constraints
+        strengthDescriptionLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: standardMargin - 2).isActive = true
+        strengthDescriptionLabel.leadingAnchor.constraint(equalTo: strongView.trailingAnchor, constant: standardMargin).isActive = true
+        strengthDescriptionLabel.widthAnchor.constraint(equalToConstant: colorViewSize.width * 2).isActive = true
+        strengthDescriptionLabel.heightAnchor.constraint(equalToConstant: colorViewSize.height * 2).isActive = true
+
     }
     
     @objc func imageTapped() {
         //change image and show password
-        showHideButton.setImage(UIImage(named: "eyes-open"), for: .normal)
+        if showHideButton.currentImage == UIImage(named: "eyes-closed") {
+            showHideButton.setImage(UIImage(named: "eyes-open"), for: .normal)
+            textField.isSecureTextEntry = false
+        } else {
+            showHideButton.setImage(UIImage(named: "eyes-closed"), for: .normal)
+            textField.isSecureTextEntry = true
+        }
     }
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
