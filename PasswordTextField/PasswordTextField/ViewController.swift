@@ -10,7 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
-
+    @IBAction func pressReturnKey(_ sender: PasswordField) {
+        if sender.password != "" {
+            print(sender.password)
+        }
+    }
+    
     // For use in the stretch goal
     //
     // Uncomment this entire method, then run the app.
@@ -19,10 +24,6 @@ class ViewController: UIViewController {
     // to install (you can use the first one "American English"). Tap
     // the little cloud download button to install it. Then just stop the app
     // and comment this method out again. This step only needs to run once.
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     
     override func viewDidAppear(_ animated: Bool) {

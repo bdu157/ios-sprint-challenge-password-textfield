@@ -155,6 +155,7 @@ class PasswordField: UIControl {
     
     @objc func imageTapped() {
         //change image and show password
+        
         if showHideButton.currentImage == UIImage(named: "eyes-closed") {
             showHideButton.setImage(UIImage(named: "eyes-open"), for: .normal)
             textField.isSecureTextEntry = false
@@ -168,15 +169,81 @@ class PasswordField: UIControl {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
+        textField.delegate = self
     }
 }
+
 
 extension PasswordField: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let oldText = textField.text!
         let stringRange = Range(range, in: oldText)!
         let newText = oldText.replacingCharacters(in: stringRange, with: string)
+        
         // TODO: send new text to the determine strength method
+        
+        if newText.count <= 9 {
+            if newText.isEmpty {
+                weakBar()
+            }
+            mediumView.backgroundColor = .lightGray
+            strongView.backgroundColor = .lightGray
+            strengthDescriptionLabel.text = StrengthLevel.weak.rawValue
+
+        } else if newText.count <= 19 && newText.count > 9 {
+            if newText.count == 10 {
+                if mediumView.backgroundColor != mediumColor {
+                    mediumBar()
+                }
+            }
+            strongView.backgroundColor = .lightGray
+        } else if newText.count >= 20 {
+            if newText.count == 20 {
+                if strongView.backgroundColor != strongColor {
+                    strongBar()
+                }
+            }
+        }
+        
         return true
     }
+    
+    func weakBar() {
+        weakView.transform = CGAffineTransform(scaleX: 1.0, y: 1.4)
+        UIView.animate(withDuration: 0.5) {
+            self.weakView.transform = .identity
+            self.strengthDescriptionLabel.text = StrengthLevel.weak.rawValue
+        }
+    }
+    
+    func mediumBar() {
+        mediumView.transform = CGAffineTransform(scaleX: 1.0, y: 1.4)
+        UIView.animate(withDuration: 0.5) {
+            self.mediumView.transform = .identity
+            self.mediumView.backgroundColor = self.mediumColor
+            self.strengthDescriptionLabel.text = StrengthLevel.medium.rawValue
+        }
+    }
+    
+    func strongBar() {
+        strongView.transform = CGAffineTransform(scaleX: 1.0, y: 1.4)
+        UIView.animate(withDuration: 0.5) {
+            self.strongView.transform = .identity
+            self.strongView.backgroundColor = self.strongColor
+            self.strengthDescriptionLabel.text = StrengthLevel.strong.rawValue
+        }
+    }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        textField.addTarget(self, action: #selector(passwordChange), for: .valueChanged)
+        sendActions(for: .valueChanged)
+        return false
+    }
+    
+    @objc func passwordChange() {
+        textField.text = self.password
+    }
+    
 }
