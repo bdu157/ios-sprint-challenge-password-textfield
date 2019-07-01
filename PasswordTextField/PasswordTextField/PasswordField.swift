@@ -197,6 +197,7 @@ extension PasswordField: UITextFieldDelegate {
                 }
             }
             strongView.backgroundColor = .lightGray
+            strengthDescriptionLabel.text = StrengthLevel.medium.rawValue
         } else if newText.count >= 20 {
             if newText.count == 20 {
                 if strongView.backgroundColor != strongColor {
@@ -204,7 +205,8 @@ extension PasswordField: UITextFieldDelegate {
                 }
             }
         }
-        
+        password = newText   //assign password as newText to get the full password
+  //   print(password)
         return true
     }
     
@@ -221,7 +223,6 @@ extension PasswordField: UITextFieldDelegate {
         UIView.animate(withDuration: 0.5) {
             self.mediumView.transform = .identity
             self.mediumView.backgroundColor = self.mediumColor
-            self.strengthDescriptionLabel.text = StrengthLevel.medium.rawValue
         }
     }
     
@@ -237,13 +238,12 @@ extension PasswordField: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        textField.addTarget(self, action: #selector(passwordChange), for: .valueChanged)
+        //textField.addTarget(self, action: #selector(change), for: .valueChanged)
         sendActions(for: .valueChanged)
         return false
     }
     
-    @objc func passwordChange() {
-        textField.text = self.password
-    }
-    
+//    @objc func change() {
+//        password = textField.text!
+//    }
 }

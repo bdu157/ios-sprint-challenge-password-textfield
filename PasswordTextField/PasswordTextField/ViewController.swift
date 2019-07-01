@@ -11,8 +11,12 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBAction func pressReturnKey(_ sender: PasswordField) {
-        if sender.password != "" {
-            print(sender.password)
+        if sender.password.count <= 9 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.weak.rawValue)")
+        } else if sender.password.count > 9 && sender.password.count <= 19 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.medium.rawValue)")
+        } else if sender.password.count > 19 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.strong.rawValue)")
         }
     }
     
