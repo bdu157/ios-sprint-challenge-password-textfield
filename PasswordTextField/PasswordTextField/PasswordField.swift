@@ -77,7 +77,6 @@ class PasswordField: UIControl {
         textField.layer.borderWidth = 2.0
         textField.tintColor = textFieldBorderColor
         textField.isSecureTextEntry = true
-        
         textField.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textField)
         
@@ -93,9 +92,14 @@ class PasswordField: UIControl {
         //howHideButton.frame = CGRect(x: 285.0, y: 10, width: 30.0, height: 30.0)
         showHideButton.setImage(UIImage(named: "eyes-closed"), for: .normal)
         showHideButton.layer.borderColor = UIColor.red.cgColor
-        showHideButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
+        showHideButton.addTarget(self, action: #selector(PasswordField.imageTapped), for: .touchUpInside)
         showHideButton.translatesAutoresizingMaskIntoConstraints = false
         textField.addSubview(showHideButton)
+        
+        //these two below will allow showHideButton to be touchable always even while editing password
+        //button was not changable unless cursor was outside of the textField
+        textField.rightView = showHideButton
+        textField.rightViewMode = .always
         
             // button constraints
         showHideButton.topAnchor.constraint(equalTo: textField.topAnchor).isActive = true
@@ -152,16 +156,19 @@ class PasswordField: UIControl {
         strengthDescriptionLabel.heightAnchor.constraint(equalToConstant: colorViewSize.height * 2).isActive = true
 
     }
+
+    var buttonBool: Bool = true
     
     @objc func imageTapped() {
         //change image and show password
-        
-        if showHideButton.currentImage == UIImage(named: "eyes-closed") {
+        if buttonBool {
             showHideButton.setImage(UIImage(named: "eyes-open"), for: .normal)
             textField.isSecureTextEntry = false
-        } else {
+            buttonBool = false
+        } else  {
             showHideButton.setImage(UIImage(named: "eyes-closed"), for: .normal)
             textField.isSecureTextEntry = true
+            buttonBool = true
         }
     }
 
@@ -175,7 +182,9 @@ class PasswordField: UIControl {
 
 
 extension PasswordField: UITextFieldDelegate {
+   
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
         let oldText = textField.text!
         let stringRange = Range(range, in: oldText)!
         let newText = oldText.replacingCharacters(in: stringRange, with: string)
@@ -209,6 +218,7 @@ extension PasswordField: UITextFieldDelegate {
   //   print(password)
         return true
     }
+
     
     func weakBar() {
         weakView.transform = CGAffineTransform(scaleX: 1.0, y: 1.4)
