@@ -10,6 +10,16 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBAction func pressReturnKey(_ sender: PasswordField) {
+        if sender.password.count <= 9 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.weak.rawValue)")
+        } else if sender.password.count > 9 && sender.password.count <= 19 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.medium.rawValue)")
+        } else if sender.password.count > 19 {
+            print("Strengh level for your password - \(sender.password) is \(StrengthLevel.strong.rawValue)")
+        }
+    }
+    
     // For use in the stretch goal
     //
     // Uncomment this entire method, then run the app.
@@ -19,12 +29,13 @@ class ViewController: UIViewController {
     // the little cloud download button to install it. Then just stop the app
     // and comment this method out again. This step only needs to run once.
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 //        // Uncomment this portion to set up the dictionary
 //        let str = "lambda"
 //        let referenceVC = UIReferenceLibraryViewController(term: str)
 //        present(referenceVC, animated: true, completion: nil)
-//    }
+        
+    }
 }
